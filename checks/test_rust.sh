@@ -26,7 +26,10 @@ bail() {
   echo >&2 "[fatal]: $*"
   exit 1
 }
-
+clippy_build() {
+  rx_cargo clippy "$@"
+  rx_cargo build "$@"
+}
 
 run_cargo_tests() {
   # Run basic tests for the current OS.
@@ -36,7 +39,7 @@ run_cargo_tests() {
   # Run checks for Windows.
   np rustup target add x86_64-pc-windows-gnu
   np rustup component add clippy
-  rx_cargo clippy --all --target x86_64-pc-windows-gnu "$@"
+  clippy_build --all --target x86_64-pc-windows-gnu "$@"
 
   # Run checks for macOS.
   np rustup target add x86_64-apple-darwin
@@ -44,7 +47,7 @@ run_cargo_tests() {
 
   # Run checks for WASM.
   np rustup target add wasm32-unknown-unknown
-  rx_cargo clippy --all --target wasm32-unknown-unknown "$@"
+  clippy_build --all --target wasm32-unknown-unknown "$@"
 
   # Run documentation checks.
   rx_cargo doc --no-deps --document-private-items "$@"
