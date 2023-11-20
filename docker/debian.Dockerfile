@@ -22,9 +22,11 @@ ENV PATH="/usr/local/cargo/bin:/usr/local/nvm/versions/node/v$NODE_VERSION/bin:$
 RUN apt-get -o Acquire::Retries=10 -qq update && \
 apt-get -o Acquire::Retries=10 -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
     ca-certificates \
+    clang \
     clang-format \
     curl \
     git \
+    lld \
     jq \
     shellcheck \
     && \
