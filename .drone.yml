@@ -17,9 +17,9 @@ depends_on:
 
 trigger:
   branch:
-  - main
+    - main
   event:
-  - push
+    - push
 
 steps:
   - name: publish
@@ -30,7 +30,7 @@ steps:
       PASSWORD:
         from_secret: docker_password
     commands:
-      - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin 
+      - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - sh tools/push_docker.sh
 ---
 kind: pipeline
@@ -39,9 +39,9 @@ name: github
 
 trigger:
   branch:
-  - main
+    - main
   event:
-  - push
+    - push
 
 steps:
   - name: mirror to GitHub
