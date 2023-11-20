@@ -23,7 +23,7 @@ trigger:
 
 steps:
   - name: publish
-    image: plugins/docker 
+    image: plugins/docker
     settings:
       repo: notgull/ci
       tags: stable
