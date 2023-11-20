@@ -62,6 +62,8 @@ RUN mkdir -pv "$NVM_DIR" && \
     npm --version && \
     node --version
 
-# Copy files from our checks.
+# Copy files from our checks and configs.
+RUN mkdir -pv "$HOME/.cargo"
+COPY ./config/cargo_config.toml "$HOME/.cargo/config.toml"
 COPY ./checks/*.sh /usr/bin/
 RUN chmod +x /usr/bin/*.sh
