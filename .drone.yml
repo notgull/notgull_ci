@@ -23,15 +23,15 @@ trigger:
 
 steps:
   - name: publish
-    image: docker:latest
-    environment:
-      USERNAME:
+    image: plugins/docker 
+    settings:
+      repo: notgull/ci
+      tags: stable
+      username:
         from_secret: docker_username
-      PASSWORD:
+      password:
         from_secret: docker_password
-    commands:
-      - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-      - sh tools/push_docker.sh
+      dockerfile: docker/debian.Dockerfile
 ---
 kind: pipeline
 type: docker
