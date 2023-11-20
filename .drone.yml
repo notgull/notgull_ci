@@ -53,6 +53,6 @@ steps:
       - apk add git openssh
       - mkdir -pv ~/.ssh
       - ssh-keyscan -H -t rsa github.com >> ~/.ssh/known_hosts
-      - echo "$SSK_KEY" > ~/.ssh/id_rsa
+      - echo "$SSK_KEY" > ~/.ssh/id_rsa && chmod 0600 ~/.ssh/id_rsa
       - git remote add github_origin git@github.com:notgull/notgull_ci.git
       - git push github_origin main
