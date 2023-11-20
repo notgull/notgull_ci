@@ -12,9 +12,9 @@ ARG RUST_VERSION
 
 ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
-    PATH="/usr/local/cargo/bin:$PATH" \
     NVM_DIR=/usr/local/nvm \
     NODE_VERSION=21.2.0 \
+    PATH="/usr/local/cargo/bin:/usr/local/nvm/versions/node/$NODE_VERSION/bin:$PATH" \
     SHFMT_URL=https://github.com/mvdan/sh/releases/download/v3.7.0/shfmt_v3.7.0_linux_amd64 \
     NVM_URL=https://github.com/nvm-sh/nvm/raw/v0.39.5/install.sh
 
