@@ -1,12 +1,16 @@
 kind: pipeline
 type: docker
-name: tidy
+name: test tools
 
 steps:
   - name: tidy
     image: notgull/ci:stable
     commands:
       - sh checks/tidy.sh
+  - name: rust test
+    image: notgull/ci:stable
+    commands:
+      - sh checks/test_rust.sh
 ---
 kind: pipeline
 type: docker

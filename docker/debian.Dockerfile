@@ -42,6 +42,12 @@ RUN curl https://sh.rustup.rs -sSf | \
     rustup --version && \
     rustc --version
 
+# Install various rustup components
+RUN rustup target add x86_64-pc-windows-gnu && \
+    rustup target add x86_64-apple-darwin && \
+    rustup target add wasm32-unknown-unknown && \
+    rustup component add clippy
+
 # Debian's repos don't have shfmt; download it for ourselves.
 RUN curl -k -L -s "$SHFMT_URL" -o /usr/bin/shfmt && \
     chmod +x /usr/bin/shfmt && \
@@ -55,5 +61,5 @@ RUN mkdir -pv "$NVM_DIR" && \
     node --version
 
 # Copy files from our checks.
-COPY ./checks/*.sh /usr/bin
+COPY ./checks/*.sh /usr/bin/
 RUN chmod +x /usr/bin/*.sh
