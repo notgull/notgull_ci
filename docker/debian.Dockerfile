@@ -26,7 +26,7 @@ apt-get -o Acquire::Retries=10 -o Dpkg::Use-Pty=0 install -y --no-install-recomm
     clang-format \
     curl \
     git \
-    lld \
+    mingw-w64 \
     jq \
     shellcheck \
     && \
@@ -63,7 +63,5 @@ RUN mkdir -pv "$NVM_DIR" && \
     node --version
 
 # Copy files from our checks and configs.
-RUN mkdir -pv "$HOME/.cargo"
-COPY ./config/cargo_config.toml "$HOME/.cargo/config.toml"
 COPY ./checks/*.sh /usr/bin/
 RUN chmod +x /usr/bin/*.sh
