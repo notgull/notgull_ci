@@ -14,9 +14,9 @@ ENV RUSTUP_HOME=/usr/local/rustup \
     CARGO_HOME=/usr/local/cargo \
     NVM_DIR=/usr/local/nvm \
     NODE_VERSION=21.2.0 \
-    PATH="/usr/local/cargo/bin:/usr/local/nvm/versions/node/$NODE_VERSION/bin:$PATH" \
     SHFMT_URL=https://github.com/mvdan/sh/releases/download/v3.7.0/shfmt_v3.7.0_linux_amd64 \
     NVM_URL=https://github.com/nvm-sh/nvm/raw/v0.39.5/install.sh
+ENV PATH="/usr/local/cargo/bin:/usr/local/nvm/versions/node/v$NODE_VERSION/bin:$PATH"
 
 # Install dependencies from apk
 RUN apt-get -o Acquire::Retries=10 -qq update && \
@@ -50,9 +50,7 @@ RUN curl -k -L -s "$SHFMT_URL" -o /usr/bin/shfmt && \
 # Debian's repos have a really old npm; download a newer version.
 RUN mkdir -pv "$NVM_DIR" && \
     curl -k -L -s -o- "$NVM_URL" | bash && \
-    bash -c ". $NVM_DIR/nvm.sh && nvm install $NODE_VERSION" && \
-    set +u && \
-    . "$NVM_DIR/nvm.sh" && \
+    bash -c ". $NVM_DIR/nvm.sh && nvm install $NODE_VERSION && nvm alias default $NODE_VERSION && nvm use default" && \
     npm --version && \
     node --version
 
