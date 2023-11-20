@@ -133,7 +133,7 @@ tidy_shell() {
     if [ -n "$(git ls-files '*Dockerfile')" ]; then
       # SC2154 doesn't seem to work on dockerfile.
       # shellcheck disable=SC2046
-      if ! rx shellcheck -e SC2148,SC2154,SC2250 $(git ls-files '*Dockerfile'); then
+      if ! rx shellcheck -e SC1090,SC2148,SC2154,SC2250 $(git ls-files '*Dockerfile'); then
         should_fail=1
       fi
     fi

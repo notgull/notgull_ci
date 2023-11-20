@@ -50,6 +50,8 @@ steps:
       SSH_KEY:
         from_secret: gh_ssh_key
     commands:
+      - apk add git ssh
+      - mkdir -pv ~/.ssh
       - ssh-keyscan -H -t rsa github.com >> ~/.ssh/known_hosts
       - git remote add github_origin git@github.com:notgull/notgull_ci.git
       - git push github_origin main
