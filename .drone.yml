@@ -6,4 +6,50 @@ steps:
   - name: tidy
     image: notgull/ci:stable
     commands:
-      - tidy.sh
+      - sh checks/tidy.sh
+---
+kind: pipeline
+type: docker
+name: publish
+
+depends_on:
+  - tidy
+
+trigger:
+  branch:
+  - main
+  event:
+  - push
+
+steps:
+  - name: publish
+    image: docker:latest
+    environment:
+      USERNAME:
+        from_secret: docker_username
+      PASSWORD:
+        from_secret: docker_password
+    commands:
+      - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin 
+      - sh tools/push_docker.sh
+---
+kind: pipeline
+type: docker
+name: github
+
+trigger:
+  branch:
+  - main
+  event:
+  - push
+
+steps:
+  - name: mirror to GitHub
+    image: alpine:edge
+    environment:
+      SSH_KEY:
+        from_secret: gh_ssh_key
+    commands:
+      - ssh-keyscan -H -t rsa github.com >> ~/.ssh/known_hosts
+      - git remote add github_origin git@github.com:notgull/notgull_ci.git
+      - git push github_origin main
