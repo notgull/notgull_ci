@@ -1,6 +1,6 @@
 kind: pipeline
 type: docker
-name: test tools
+name: test-tools
 
 steps:
   - name: tidy
@@ -17,7 +17,7 @@ type: docker
 name: publish
 
 depends_on:
-  - tidy
+  - test-tools
 
 trigger:
   branch:
