@@ -21,6 +21,15 @@ steps:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:stable -f docker/debian.Dockerfile .
       - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:stable sh checks/test_rust.sh
+  - name: rust beta
+    image: docker:dind
+    volumes:
+      - name: dockersock
+        path: /var/run
+    commands:
+      - sleep 5 # Wait for Docker to start.
+      - docker build --tag notgull/ci:beta -f docker/debian.Dockerfile . --build-arg="RUST_VERSION=beta"
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:beta sh checks/test_rust.sh
   - name: rust nightly
     image: docker:dind
     volumes:
@@ -57,7 +66,7 @@ trigger:
     - push
 
 steps:
-  - name: publish
+  - name: publish stable
     image: plugins/docker
     settings:
       repo: notgull/ci
@@ -67,6 +76,54 @@ steps:
       password:
         from_secret: docker_password
       dockerfile: docker/debian.Dockerfile
+  - name: publish beta
+    image: plugins/docker
+    settings:
+      repo: notgull/ci
+      tags: beta
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      dockerfile: docker/debian.Dockerfile
+      build_args:
+        - RUST_VERSION=beta
+  - name: publish nightly
+    image: plugins/docker
+    settings:
+      repo: notgull/ci
+      tags: nightly
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      dockerfile: docker/debian.Dockerfile
+      build_args:
+        - RUST_VERSION=nightly
+  - name: publish 1.63.0
+    image: plugins/docker
+    settings:
+      repo: notgull/ci
+      tags: 1.63.0
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      dockerfile: docker/debian.Dockerfile
+      build_args:
+        - RUST_VERSION=1.63.0
+  - name: publish 1.65.0
+    image: plugins/docker
+    settings:
+      repo: notgull/ci
+      tags: 1.65.0
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      dockerfile: docker/debian.Dockerfile
+      build_args:
+        - RUST_VERSION=1.65.0
 ---
 kind: pipeline
 type: docker
