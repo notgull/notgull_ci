@@ -4,13 +4,41 @@ name: test-tools
 
 steps:
   - name: tidy
-    image: notgull/ci:stable
+    image: docker:dind
+    volumes:
+      - name: dockersock
+        path: /var/run
     commands:
-      - sh checks/tidy.sh
-  - name: rust test
-    image: notgull/ci:stable
+      - docker build --tag notgull/ci:stable -f docker/debian.Dockerfile .
+      - docker run --rm -it notgull/ci:stable sh checks/tidy.sh
+  - name: rust stable
+    image: docker:dind
+    volumes:
+      - name: dockersock
+        path: /var/run
     commands:
-      - sh checks/test_rust.sh
+      - docker build --tag notgull/ci:stable -f docker/debian.Dockerfile .
+      - docker run --rm -it notgull/ci:stable sh checks/test_rust.sh
+  - name: rust nightly
+    image: docker:dind
+    volumes:
+      - name: dockersock
+        path: /var/run
+    commands:
+      - docker build --tag notgull/ci:nightly -f docker/debian.Dockerfile . --build-arg="RUST_VERSION=nightly"
+      - docker run --rm -it notgull/ci:nightly sh checks/test_rust.sh
+
+services:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
+volumes:
+  - name: dockersock
+    temp: {}
 ---
 kind: pipeline
 type: docker
