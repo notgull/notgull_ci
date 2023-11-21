@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -exu
+set -eu
 
 # Checks that the Rust project is tidied up.
 # Assumes that the following utilities are already installed:
