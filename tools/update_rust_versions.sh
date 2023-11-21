@@ -22,12 +22,12 @@ real_rust_version() {
 versions="stable beta nightly"
 for version in $versions; do
   real_version="$(real_rust_version "$version")"
-  cur_version="$(jq -r ".$version" < "$ver_database")"
+  cur_version="$(jq -r ".$version" <"$ver_database")"
 
   # Update the version of rust in our setup if needed.
   if [ "$real_version" != "$cur_version" ]; then
     echo "[info]: rust version $version was $cur_version, is now $real_version"
-    jq -r ".$version = \"$real_version\"" < "$ver_database" > "$ver_database.new"
+    jq -r ".$version = \"$real_version\"" <"$ver_database" >"$ver_database.new"
   fi
 done
 
