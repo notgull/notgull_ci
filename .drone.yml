@@ -11,8 +11,7 @@ steps:
     commands:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:stable -f docker/debian.Dockerfile .
-      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) \
-          notgull/ci:stable sh checks/tidy.sh
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:stable sh checks/tidy.sh
   - name: rust stable
     image: docker:dind
     volumes:
@@ -21,8 +20,7 @@ steps:
     commands:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:stable -f docker/debian.Dockerfile .
-      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) \
-          notgull/ci:stable sh checks/test_rust.sh
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:stable sh checks/test_rust.sh
   - name: rust nightly
     image: docker:dind
     volumes:
@@ -31,8 +29,7 @@ steps:
     commands:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:nightly -f docker/debian.Dockerfile . --build-arg="RUST_VERSION=nightly"
-      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) \
-          notgull/ci:nightly sh checks/test_rust.sh
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:nightly sh checks/test_rust.sh
 
 services:
   - name: docker
