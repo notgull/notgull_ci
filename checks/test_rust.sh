@@ -62,11 +62,23 @@ if ! np command -v cargo; then
   bail "cargo not found on the system"
 fi
 
+featuresets=""
+for argument in "$@"; do
+  case "$argument" in
+  "--skip-ndf") skip_ndf=1 ;;
+  *) featuresets="$featuresets $argument" ;;
+  esac
+done
+
 # Just test the default feature-set and the feature-less set.
 run_cargo_tests
-run_cargo_tests --no-default-features
+if [ -z "${skip_ndf:-}" ]; then
+  run_cargo_tests --no-default-features
+fi
 
 # Run other feature sets as well.
-for featureset in "$@"; do
-  run_cargo_tests --no-default-features --features "$featureset"
-done
+if [ -n "$featuresets" ]; then
+  for featureset in $featuresets; do
+    run_cargo_tests --no-default-features --features "$featureset"
+  done
+fi

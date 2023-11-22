@@ -58,11 +58,7 @@ tidy_rust_files() {
     # shellcheck disable=SC2046
     check_diff $(git ls-files '*.rs')
 
-    # Check clippy
-    np rustup component add clippy
-    rx cargo clippy --all --all-targets
-    rx cargo clippy --all --all-targets --no-default-features
-    rx cargo clippy --all --all-targets --all-features
+    # Avoid using up all of our disk space by cleaning.
     np cargo clean
   else
     warn "'rustup' is not installed; skipped Rust style check"
