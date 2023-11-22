@@ -66,7 +66,7 @@ trigger:
     - push
 
 steps:
-  - name: publish stable
+  - name: publish_stable
     image: plugins/docker
     settings:
       repo: notgull/ci
@@ -76,7 +76,7 @@ steps:
       password:
         from_secret: docker_password
       dockerfile: docker/debian.Dockerfile
-  - name: publish beta
+  - name: publish_beta
     image: plugins/docker
     settings:
       repo: notgull/ci
@@ -88,7 +88,7 @@ steps:
       dockerfile: docker/debian.Dockerfile
       build_args:
         - RUST_VERSION=beta
-  - name: publish nightly
+  - name: publish_nightly
     image: plugins/docker
     settings:
       repo: notgull/ci
@@ -100,7 +100,7 @@ steps:
       dockerfile: docker/debian.Dockerfile
       build_args:
         - RUST_VERSION=nightly
-  - name: publish 1.63.0
+  - name: publish_1.63.0
     image: plugins/docker
     settings:
       repo: notgull/ci
@@ -112,7 +112,7 @@ steps:
       dockerfile: docker/debian.Dockerfile
       build_args:
         - RUST_VERSION=1.63.0
-  - name: publish 1.65.0
+  - name: publish_1.65.0
     image: plugins/docker
     settings:
       repo: notgull/ci
@@ -124,6 +124,16 @@ steps:
       dockerfile: docker/debian.Dockerfile
       build_args:
         - RUST_VERSION=1.65.0
+  - name: target
+    image: busybox:latest
+    commands:
+      - echo "placeholder to enable acyclic graph mode"
+    depends_on:
+      - publish_stable
+      - publish_beta
+      - publish_nightly
+      - publish_1.63.0
+      - publish_1.65.0
 ---
 kind: pipeline
 type: docker

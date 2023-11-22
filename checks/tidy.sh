@@ -95,14 +95,14 @@ tidy_prettier() {
   fi
 }
 tidy_markdown() {
-  if [ -z "$(git ls-files '*.md')" ]; then
+  if ! (git ls-files '*.md' | grep -qiv license); then
     return
   fi
 
   info "checking Markdown style"
   if np command -v npm; then
     # shellcheck disable=SC2046
-    if ! rx npx -y markdownlint-cli2 $(git ls-files '*.md'); then
+    if ! rx npx -y markdownlint-cli2 $(git ls-files '*.md' | grep -iv license); then
       should_fail=1
     fi
   else
