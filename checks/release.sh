@@ -19,6 +19,9 @@ bail() {
   echo >&2 "[fatal]: $*"
   exit 1
 }
+info() {
+  echo >&2 "[info]: $*"
+}
 find_str() {
   haystack="$1"
   shift
@@ -35,11 +38,17 @@ fi
 tagname="$(rx git name-rev --tags --name-only "$(git rev-parse HEAD)")"
 
 # Check for a tag.
-if find_str "$tagname" -E '^v[0-9]+.*$'; then
-  # Success.
+if ! find_str "$tagname" -E '^v[0-9]+.*$'; then
+  # Not a release.
+  info "'$tagname' is not a release -- exiting"
   exit 0
-else
-  # Error code 78 tells Drone CI to skip the rest of the steps.
-  exit 78
 fi
 
+# Make a release.
+if ! np command -v tea; then
+  fatal "tea command line tool not found"
+fi
+rx tea release create \
+    --title "$tagname" \
+    -n "TODO: describe changelog" \
+    --tag "$tagname"
