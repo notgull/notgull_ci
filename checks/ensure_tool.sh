@@ -98,15 +98,15 @@ sys_install() {
 install_node() {
   version="$1"
 
-  NVM_URL="https://github.com/mvdan/sh/releases/download/v3.7.0/shfmt_v3.7.0_linux_amd64"
+  NVM_URL="https://github.com/nvm-sh/nvm/raw/v0.39.5/install.sh"
   NVM_DIR="/usr/local/nvm"
 
   if ! has_command bash; then
-    info "installing bash"
     install_package bash
   fi
 
-  curl -sSf "$NVM_URL" | bash
+  mkdir -pv "$NVM_DIR"
+  curl -sSf -L "$NVM_URL" | NVM_DIR="$NVM_DIR" bash
   rx bash -c ". $NVM_DIR/nvm.sh && nvm install $version && nvm alias default $version && nvm use default"
   export PATH="$NVM_DIR/versions/node/v$version/bin:${PATH:-}"
   np npm --version
@@ -115,7 +115,7 @@ install_node() {
 install_shfmt() {
   SHFMT_URL="https://github.com/mvdan/sh/releases/download/v3.7.0/shfmt_v3.7.0_linux_amd64"
 
-  priv curl -sSf "$SHFMT_URL" -o /usr/bin/shfmt
+  priv curl -sSf -L "$SHFMT_URL" -o /usr/bin/shfmt
   priv chmod +x /usr/bin/shfmt
   np shfmt --version
 }
@@ -144,7 +144,7 @@ install_rust() {
 install_tea() {
   TEA_URL="https://dl.gitea.com/tea/0.9.2/tea-0.9.2-linux-amd64"
 
-  priv curl -sSf "$TEA_URL" -o /usr/bin/tea
+  priv curl -sSf -L "$TEA_URL" -o /usr/bin/tea
   priv chmod +x /usr/bin/tea
   np tea --version
 }
