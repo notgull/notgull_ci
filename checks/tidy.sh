@@ -37,6 +37,10 @@ np() {
   "$cmd" "$@" >/dev/null 2>/dev/null
 }
 
+if np command -v ensure_tool.sh; then
+  ensure_tool.sh git rust:stable node shfmt shellcheck clang-format
+fi
+
 check_diff() {
   if ! git --no-pager diff --exit-code "$@"; then
     should_fail=1

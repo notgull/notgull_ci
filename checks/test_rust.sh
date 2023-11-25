@@ -55,6 +55,13 @@ run_cargo_tests() {
   cargo clean
 }
 
+toolchain="$1"
+shift
+
+if np command -v ensure_tool.sh; then
+  ensure_tool.sh rust:"$toolchain"
+fi
+
 if ! np command -v rustup; then
   bail "rustup not found on the system"
 fi

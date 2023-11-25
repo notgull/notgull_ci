@@ -30,6 +30,10 @@ $haystack
 EOF
 }
 
+if np command -v ensure_tool.sh; then
+  ensure_tool.sh git tea
+fi
+
 if ! np command -v git; then
   bail "Unable to find git"
 fi
@@ -49,6 +53,6 @@ if ! np command -v tea; then
   fatal "tea command line tool not found"
 fi
 rx tea release create \
-    --title "$tagname" \
-    -n "TODO: describe changelog" \
-    --tag "$tagname"
+  --title "$tagname" \
+  -n "TODO: describe changelog" \
+  --tag "$tagname"

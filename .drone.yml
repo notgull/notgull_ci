@@ -20,7 +20,7 @@ steps:
     commands:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:stable -f docker/debian.Dockerfile .
-      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:stable sh checks/test_rust.sh
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:stable sh checks/test_rust.sh stable
   - name: rust beta
     image: docker:dind
     volumes:
@@ -29,7 +29,7 @@ steps:
     commands:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:beta -f docker/debian.Dockerfile . --build-arg="RUST_VERSION=beta"
-      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:beta sh checks/test_rust.sh
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:beta sh checks/test_rust.sh beta
   - name: rust nightly
     image: docker:dind
     volumes:
@@ -38,7 +38,7 @@ steps:
     commands:
       - sleep 5 # Wait for Docker to start.
       - docker build --tag notgull/ci:nightly -f docker/debian.Dockerfile . --build-arg="RUST_VERSION=nightly"
-      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:nightly sh checks/test_rust.sh
+      - docker run --rm -i -v $(pwd):$(pwd) -w $(pwd) notgull/ci:nightly sh checks/test_rust.sh nightly
 
 services:
   - name: docker
@@ -66,74 +66,16 @@ trigger:
     - push
 
 steps:
-  - name: publish_stable
+  - name: publish
     image: plugins/docker
     settings:
       repo: notgull/ci
-      tags: stable
+      tags: latest
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
       dockerfile: docker/debian.Dockerfile
-  - name: publish_beta
-    image: plugins/docker
-    settings:
-      repo: notgull/ci
-      tags: beta
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      dockerfile: docker/debian.Dockerfile
-      build_args:
-        - RUST_VERSION=beta
-  - name: publish_nightly
-    image: plugins/docker
-    settings:
-      repo: notgull/ci
-      tags: nightly
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      dockerfile: docker/debian.Dockerfile
-      build_args:
-        - RUST_VERSION=nightly
-  - name: publish_1.63.0
-    image: plugins/docker
-    settings:
-      repo: notgull/ci
-      tags: 1.63.0
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      dockerfile: docker/debian.Dockerfile
-      build_args:
-        - RUST_VERSION=1.63.0
-  - name: publish_1.65.0
-    image: plugins/docker
-    settings:
-      repo: notgull/ci
-      tags: 1.65.0
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      dockerfile: docker/debian.Dockerfile
-      build_args:
-        - RUST_VERSION=1.65.0
-  - name: target
-    image: busybox:latest
-    commands:
-      - echo "placeholder to enable acyclic graph mode"
-    depends_on:
-      - publish_stable
-      - publish_beta
-      - publish_nightly
-      - publish_1.63.0
-      - publish_1.65.0
 ---
 kind: pipeline
 type: docker
