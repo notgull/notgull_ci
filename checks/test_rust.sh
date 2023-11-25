@@ -59,7 +59,7 @@ toolchain="${1:-stable}"
 shift
 
 if np command -v ensure_tool.sh; then
-  ensure_tool.sh clang rust:"$toolchain"
+  ensure_tool.sh clang mingw-w64 rust:"$toolchain"
 fi
 
 if ! np command -v rustup; then
