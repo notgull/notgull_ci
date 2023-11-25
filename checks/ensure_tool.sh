@@ -132,7 +132,7 @@ install_rust() {
     info "rustup not found; installing"
     curl https://sh.rustup.rs -sSf |
       sh -s -- -y --no-modify-path --profile minimal --default-toolchain "$toolchain"
-    # shellcheck disable=SC1091 
+    # shellcheck disable=SC1090,SC1091
     . "$HOME/.cargo/env"
     np rustup --version
   fi
