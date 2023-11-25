@@ -61,17 +61,17 @@ priv() {
 }
 
 apt_update() {
-  retry priv apt-get -o Acquire::Retries=10 -qq update
+  retry rx priv apt-get -o Acquire::Retries=10 -qq update
   apt_updated=1
 }
 apt_install() {
   if [ -z "${apt_updated:-}" ]; then
     apt_update
   fi
-  retry priv apt-get -qq -o Acquire::Retries=10 -o Dpkg:Use-Pty=0 -y --no-install-recommends "$@"
+  retry rx priv apt-get -qq -o Acquire::Retries=10 -o Dpkg:Use-Pty=0 -y --no-install-recommends install "$@"
 }
 apk_install() {
-  priv apk --no-cache add "$@"
+  rx priv apk --no-cache add "$@"
 }
 dnf_install() {
   if [ -z "${dnf:-}" ]; then
@@ -84,7 +84,7 @@ dnf_install() {
     fi
   fi
 
-  retry priv "$dnf" install -y "$@"
+  retry rx priv "$dnf" install -y "$@"
 }
 sys_install() {
   case "$base_distro" in
