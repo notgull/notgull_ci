@@ -61,17 +61,17 @@ priv() {
 }
 
 apt_update() {
-  retry rx priv apt-get -o Acquire::Retries=10 -qq update
+  retry priv apt-get -o Acquire::Retries=10 -qq update
   apt_updated=1
 }
 apt_install() {
   if [ -z "${apt_updated:-}" ]; then
     apt_update
   fi
-  retry rx priv apt-get -qq -o Acquire::Retries=10 -o Dpkg:Use-Pty=0 -y --no-install-recommends install "$@"
+  retry priv apt-get -qq -o Acquire::Retries=10 -o Dpkg:Use-Pty=0 -y --no-install-recommends install "$@"
 }
 apk_install() {
-  rx priv apk --no-cache add "$@"
+  priv apk --no-cache add "$@"
 }
 dnf_install() {
   if [ -z "${dnf:-}" ]; then
@@ -84,7 +84,7 @@ dnf_install() {
     fi
   fi
 
-  retry rx priv "$dnf" install -y "$@"
+  retry priv "$dnf" install -y "$@"
 }
 sys_install() {
   case "$base_distro" in
@@ -132,6 +132,8 @@ install_rust() {
     info "rustup not found; installing"
     curl https://sh.rustup.rs -sSf |
       sh -s -- -y --no-modify-path --profile minimal --default-toolchain "$toolchain"
+    # shellcheck disable=SC1091 
+    . "$HOME/.cargo/env"
     np rustup --version
   fi
 
