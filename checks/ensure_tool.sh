@@ -187,6 +187,7 @@ install_package() {
     esac
     ;;
   shellcheck) sys_install shellcheck ;;
+  shfmt) install_shfmt ;;
   tea)
     case "$base_distro" in
     alpine) sys_install tea ;;
