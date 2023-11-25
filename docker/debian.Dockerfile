@@ -12,7 +12,7 @@ RUN apt-get -o Acquire::Retries=10 -qq update && \
 apt-get -o Acquire::Retries=10 -o Dpkg::Use-Pty=0 install -y --no-install-recommends \
     ca-certificates \
     curl \
-    git
+    git && \
 rm -rf \
     /var/lib/apt/lists/* \
     /var/cache/* \
