@@ -110,6 +110,7 @@ install_node() {
   rx bash -c ". $NVM_DIR/nvm.sh && nvm install $version && nvm alias default $version && nvm use default"
   priv ln -s "$NVM_DIR/versions/node/v$version/bin/npm" /usr/bin/npm
   priv ln -s "$NVM_DIR/versions/node/v$version/bin/node" /usr/bin/node
+  priv ln -s "$NVM_DIR/versions/node/v$version/bin/npx" /usr/bin/npx
   np npm --version
   np node --version
 }
