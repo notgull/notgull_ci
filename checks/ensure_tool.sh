@@ -94,6 +94,10 @@ sys_install() {
   *) bail "cannot use sys_install on non-Linux" ;;
   esac
 }
+link_tool() {
+  tool="$1"
+  priv ln -s "$tool" "/usr/bin/$(basename -- "$tool")"
+}
 
 install_node() {
   version="$1"
@@ -108,9 +112,9 @@ install_node() {
   mkdir -pv "$NVM_DIR"
   curl -sSf -L "$NVM_URL" | NVM_DIR="$NVM_DIR" bash
   rx bash -c ". $NVM_DIR/nvm.sh && nvm install $version && nvm alias default $version && nvm use default"
-  priv ln -s "$NVM_DIR/versions/node/v$version/bin/npm" /usr/bin/npm
-  priv ln -s "$NVM_DIR/versions/node/v$version/bin/node" /usr/bin/node
-  priv ln -s "$NVM_DIR/versions/node/v$version/bin/npx" /usr/bin/npx
+  link_tool "$NVM_DIR/versions/node/v$version/bin/npm"
+  link_tool "$NVM_DIR/versions/node/v$version/bin/node"
+  link_tool "$NVM_DIR/versions/node/v$version/bin/npx"
   np npm --version
   np node --version
 }
@@ -140,7 +144,8 @@ install_rust() {
 
   # Install the toolchain.
   rx rustup toolchain add "$toolchain"
-  priv ln -s "$HOME/.cargo/bin/cargo" "/usr/bin/cargo"
+  link_tool "$HOME/.cargo/bin/cargo"
+  link_tool "$HOME/.cargo/bin/rustfmt"
   np cargo --version
 }
 install_tea() {
