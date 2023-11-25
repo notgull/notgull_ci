@@ -108,7 +108,8 @@ install_node() {
   mkdir -pv "$NVM_DIR"
   curl -sSf -L "$NVM_URL" | NVM_DIR="$NVM_DIR" bash
   rx bash -c ". $NVM_DIR/nvm.sh && nvm install $version && nvm alias default $version && nvm use default"
-  export PATH="$NVM_DIR/versions/node/v$version/bin:${PATH:-}"
+  priv ln -s "$NVM_DIR/versions/node/v$version/bin/npm" /usr/bin/npm
+  priv ln -s "$NVM_DIR/versions/node/v$version/bin/node" /usr/bin/node
   np npm --version
   np node --version
 }
