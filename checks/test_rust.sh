@@ -55,11 +55,11 @@ run_cargo_tests() {
   cargo clean
 }
 
-toolchain="$1"
+toolchain="${1:-stable}"
 shift
 
 if np command -v ensure_tool.sh; then
-  ensure_tool.sh rust:"$toolchain"
+  ensure_tool.sh clang rust:"$toolchain"
 fi
 
 if ! np command -v rustup; then
