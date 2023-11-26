@@ -58,7 +58,7 @@ tidy_rust_files() {
     # Check formatting.
     np rustup component add rustfmt
     # shellcheck disable=SC2046
-    rx rustfmt $(git ls-files '*.rs')
+    rx rustfmt --edition 2018 $(git ls-files '*.rs')
     # shellcheck disable=SC2046
     check_diff $(git ls-files '*.rs')
 
