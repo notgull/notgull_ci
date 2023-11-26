@@ -23,7 +23,14 @@ retry() {
 }
 bail() {
   echo >&2 "[fatal]: $*"
-  exit 1
+  return 1
+}
+error() {
+  echo >&2 "[error]: $*"
+  should_fail=1
+}
+warn() {
+  echo >&2 "[warn]: $*"
 }
 info() {
   echo >&2 "[info]: $*"
@@ -201,6 +208,13 @@ install_package() {
     *) install_tea ;;
     esac
     ;;
+  x11)
+    case "$base_distro" in
+    alpine) sys_install libx11-dev libxcb-dev libxkbcommon-dev ;;
+    ubuntu) sys_install libx11-dev libx11-xcb-dev libxcb1-dev libxkbcommon-dev ;;
+    fedora) sys_install libX11-devel libX11-xcb libxcb-devel libxkbcommon-devel ;;
+    esac
+    ;;
   *) bail "unknown package $package" ;;
   esac
 }
@@ -224,5 +238,12 @@ Linux)
 esac
 
 for package in "$@"; do
-  install_package "$package"
+  if ! install_package "$package"; then
+    error "failed to install package '$package'"
+  fi
 done
+
+if [ -n "${should_fail:-}" ]; then
+  error "encountered errors, exiting now"
+  exit 1
+fi
