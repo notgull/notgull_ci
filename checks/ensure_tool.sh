@@ -211,7 +211,7 @@ install_package() {
   x11)
     case "$base_distro" in
     alpine) sys_install libx11-dev libxcb-dev libxkbcommon-dev ;;
-    ubuntu) sys_install libx11-dev libx11-xcb-dev libxcb1-dev libxkbcommon-dev ;;
+    debian) sys_install libx11-dev libx11-xcb-dev libxcb1-dev libxkbcommon-dev ;;
     fedora) sys_install libX11-devel libX11-xcb libxcb-devel libxkbcommon-devel ;;
     esac
     ;;
