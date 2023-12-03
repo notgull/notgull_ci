@@ -106,6 +106,19 @@ link_tool() {
   priv ln -s "$tool" "/usr/bin/$(basename -- "$tool")"
 }
 
+install_pkgconfig() {
+  if [ -n "${has_pkgconfig:-}" ]; then
+    return
+  fi
+
+  # Fedora has pkg-config by default
+  case "$base_distro" in
+  alpine) sys_install pkgconfig ;;
+  debian) sys_install pkg-config ;;
+  esac
+
+  has_pkgconfig=1
+}
 install_node() {
   version="$1"
 
@@ -209,6 +222,7 @@ install_package() {
     esac
     ;;
   wayland)
+    install_pkgconfig
     case "$base_distro" in
     alpine) sys_install wayland-dev wayland-libs-client libxkbcommon-dev ;;
     debian) sys_install libwayland-dev libwayland-client0 libwayland-server0 ;;
@@ -216,6 +230,7 @@ install_package() {
     esac
     ;;
   x11)
+    install_pkgconfig
     case "$base_distro" in
     alpine) sys_install libx11-dev libxcb-dev libxkbcommon-dev ;;
     debian) sys_install libx11-dev libx11-xcb-dev libxcb1-dev libxkbcommon-dev ;;
