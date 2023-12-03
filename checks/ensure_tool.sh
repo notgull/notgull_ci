@@ -208,6 +208,13 @@ install_package() {
     *) install_tea ;;
     esac
     ;;
+  wayland)
+    case "$base_distro" in
+    alpine) sys_install wayland-dev wayland-libs-client libxkbcommon-dev ;;
+    debian) sys_install libwayland-dev libwayland-client0 libwayland-server0 ;;
+    fedora) sys_install libwayland-client libwayland-server ;;
+    esac
+    ;;
   x11)
     case "$base_distro" in
     alpine) sys_install libx11-dev libxcb-dev libxkbcommon-dev ;;
