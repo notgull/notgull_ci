@@ -37,17 +37,23 @@ run_cargo_tests() {
   rx_cargo test "$@"
 
   # Run checks for Windows.
-  np rustup target add x86_64-pc-windows-gnu
-  np rustup component add clippy
-  clippy_build --all --target x86_64-pc-windows-gnu "$@"
+  if [ -z "${skip_windows:-}" ]; then
+    np rustup target add x86_64-pc-windows-gnu
+    np rustup component add clippy
+    clippy_build --all --target x86_64-pc-windows-gnu "$@"
+  fi
 
   # Run checks for macOS.
-  np rustup target add x86_64-apple-darwin
-  rx_cargo clippy --all --target x86_64-apple-darwin "$@"
+  if [ -z "${skip_macos:-}" ]; then
+    np rustup target add x86_64-apple-darwin
+    rx_cargo clippy --all --target x86_64-apple-darwin "$@"
+  fi
 
   # Run checks for WASM.
-  np rustup target add wasm32-unknown-unknown
-  clippy_build --all --target wasm32-unknown-unknown "$@"
+  if [ -z "${skip_wasm:-}" ]; then
+    np rustup target add wasm32-unknown-unknown
+    clippy_build --all --target wasm32-unknown-unknown "$@"
+  fi
 
   # Run documentation checks.
   rx_cargo doc --no-deps --document-private-items "$@"
@@ -73,6 +79,9 @@ featuresets=""
 for argument in "$@"; do
   case "$argument" in
   "--skip-ndf") skip_ndf=1 ;;
+  "--skip-windows") skip_windows=1 ;;
+  "--skip-macos") skip_macos=1 ;;
+  "--skip-wasm") skip_wasm=1 ;;
   *) featuresets="$featuresets $argument" ;;
   esac
 done
